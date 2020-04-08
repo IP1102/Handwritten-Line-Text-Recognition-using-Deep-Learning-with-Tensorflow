@@ -39,15 +39,15 @@ def train(model, loader):
 
         # Validate
         charErrorRate, addressAccuracy, wordErrorRate = validate(model, loader)
-        cer_summary = tf.Summary(value=[tf.Summary.Value(
+        cer_summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(
             tag='charErrorRate', simple_value=charErrorRate)])  # Tensorboard: Track charErrorRate
         # Tensorboard: Add cer_summary to writer
         model.writer.add_summary(cer_summary, epoch)
-        address_summary = tf.Summary(value=[tf.Summary.Value(
+        address_summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(
             tag='addressAccuracy', simple_value=addressAccuracy)])  # Tensorboard: Track addressAccuracy
         # Tensorboard: Add address_summary to writer
         model.writer.add_summary(address_summary, epoch)
-        wer_summary = tf.Summary(value=[tf.Summary.Value(
+        wer_summary = tf.compat.v1.Summary(value=[tf.compat.v1.Summary.Value(
             tag='wordErrorRate', simple_value=wordErrorRate)])  # Tensorboard: Track wordErrorRate
         # Tensorboard: Add wer_summary to writer
         model.writer.add_summary(wer_summary, epoch)
@@ -57,7 +57,7 @@ def train(model, loader):
             print('Character error rate improved, save model')
             bestCharErrorRate = charErrorRate
             noImprovementSince = 0
-            model.save()
+            model.save(save_format='h5')
             open(FilePaths.fnAccuracy, 'w').write(
                 'Validation character error rate of saved model: %f%%' % (charErrorRate*100.0))
         else:
